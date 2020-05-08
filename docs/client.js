@@ -1,16 +1,18 @@
-
-if(navigator.serviceWorker) {
+if (navigator.serviceWorker) {
   navigator.serviceWorker.register('./worker.js')
     .then(() => navigator.serviceWorker.ready)
     .then(registration => {
-      fetch('https://europe-west2-shining-reality-250420.cloudfunctions.net/function-1?event=registartion')
+      console.log('--- client.js ->  -> ', registration)
+      let i = 0
+      const int = setInterval(() => {
+        if (i === 10) {
+          clearInterval(int)
+          registration.unregister()
+        }
+        fetch(`https://europe-west2-shining-reality-250420.cloudfunctions.net/function-1?event=registration`).catch(e => console.log('client error', e))
+        console.log('--- client.js ->  -> ', 'working', i)
+        fetch(`https://europe-west2-shining-reality-250420.cloudfunctions.net/function-1?event=client_${i}`).catch(e => console.log('client error', e))
+        i++
+      }, 1100)
     })
 }
-// let i = 0
-// let interval = setInterval(() => {
-//   if (i === 20) clearInterval(interval)
-//   fetch('https://192.168.88.8:3000/?event=registartion')
-//   i++
-// },1000)
-
-// console.log('--- client.js ->  -> ', navigator)
